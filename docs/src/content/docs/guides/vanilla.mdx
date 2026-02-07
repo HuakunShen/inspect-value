@@ -1,6 +1,6 @@
 ---
 title: Vanilla JavaScript
-description: Using inspect-value-element with plain HTML and JavaScript
+description: Using inspect-value with plain HTML and JavaScript
 ---
 
 No framework needed — just import the script and use the elements.
@@ -13,7 +13,7 @@ No framework needed — just import the script and use the elements.
   <body>
     <inspect-value id="demo" name="myData"></inspect-value>
 
-    <script type="module" src="https://unpkg.com/inspect-value-element"></script>
+    <script type="module" src="https://unpkg.com/inspect-value"></script>
     <script type="module">
       const el = document.getElementById('demo');
 
@@ -35,11 +35,11 @@ No framework needed — just import the script and use the elements.
 ## Via bundler
 
 ```bash
-npm install inspect-value-element
+npm install inspect-value
 ```
 
 ```js
-import 'inspect-value-element';
+import 'inspect-value';
 
 const el = document.createElement('inspect-value');
 el.value = { hello: 'world' };

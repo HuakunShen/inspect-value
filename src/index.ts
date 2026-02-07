@@ -1,5 +1,5 @@
 /**
- * inspect-value-element
+ * inspect-value
  *
  * Web Component wrapper for svelte-inspect-value.
  * Works in React, Vue, Angular, or plain HTML.
@@ -12,13 +12,13 @@
  *   </script>
  *
  * Usage (React):
- *   import 'inspect-value-element';
+ *   import 'inspect-value';
  *   const ref = useRef();
  *   useEffect(() => { ref.current.value = data; }, [data]);
  *   <inspect-value ref={ref} theme="dark" />
  *
  * Usage (Vue):
- *   import 'inspect-value-element';
+ *   import 'inspect-value';
  *   <inspect-value :value.prop="data" theme="dark" />
  */
 

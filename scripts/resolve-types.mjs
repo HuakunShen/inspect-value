@@ -63,7 +63,7 @@ const expandAll = resolveOptionType('expandAll');
 
 const output = `\
 /**
- * Type declarations for inspect-value-element custom elements.
+ * Type declarations for inspect-value custom elements.
  * Provides autocomplete in React (JSX) and Vue templates.
  *
  * Types for theme, search, showTypes, showLength, showPreview, and expandAll

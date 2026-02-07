@@ -1,6 +1,6 @@
 ---
 title: Svelte
-description: Using inspect-value-element in Svelte applications
+description: Using inspect-value in Svelte applications
 ---
 
 import AllTypesDemo from '../../../components/svelte/AllTypesDemo.svelte';
@@ -12,7 +12,7 @@ import DemoSection from '../../../components/shared/DemoSection.astro';
 ## Installation
 
 ```bash
-npm install inspect-value-element
+npm install inspect-value
 ```
 
 :::note
@@ -25,7 +25,7 @@ Use `bind:this` to get a reference to the element, then set properties in a `$ef
 
 ```svelte
 <script>
-  import 'inspect-value-element';
+  import 'inspect-value';
 
   let el;
   let data = $state({ hello: 'world', items: [1, 2, 3] });
@@ -79,7 +79,7 @@ The recommended pattern with Svelte 5 runes:
 
 ```svelte
 <script>
-  import 'inspect-value-element';
+  import 'inspect-value';
 
   let el = $state();
   let theme = $state('inspect');

@@ -1,6 +1,6 @@
 ---
 title: Vue
-description: Using inspect-value-element in Vue applications
+description: Using inspect-value in Vue applications
 ---
 
 import AllTypesDemo from '../../../components/vue/AllTypesDemo.vue';
@@ -12,7 +12,7 @@ import DemoSection from '../../../components/shared/DemoSection.astro';
 ## Installation
 
 ```bash
-npm install inspect-value-element
+npm install inspect-value
 ```
 
 ## Integration Pattern
@@ -21,7 +21,7 @@ Vue can pass properties to custom elements using the `.prop` modifier:
 
 ```vue
 <script setup>
-import 'inspect-value-element';
+import 'inspect-value';
 import { ref } from 'vue';
 
 const data = ref({ hello: 'world', items: [1, 2, 3] });
@@ -36,7 +36,7 @@ For more control, use `ref()` + `onMounted`:
 
 ```vue
 <script setup>
-import 'inspect-value-element';
+import 'inspect-value';
 import { ref, onMounted, watch } from 'vue';
 
 const el = ref(null);
@@ -116,7 +116,7 @@ Deep search across nested structures with three modes.
 The package includes Vue type declarations. Types are available after import:
 
 ```ts
-import 'inspect-value-element';
+import 'inspect-value';
 ```
 
 The `GlobalComponents` interface is augmented so `<inspect-value>` and `<inspect-panel>` get autocomplete in Vue templates.

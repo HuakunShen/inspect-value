@@ -1,6 +1,6 @@
 ---
 title: React
-description: Using inspect-value-element in React applications
+description: Using inspect-value in React applications
 ---
 
 import AllTypesDemo from '../../../components/react/AllTypesDemo.tsx';
@@ -12,7 +12,7 @@ import DemoSection from '../../../components/shared/DemoSection.astro';
 ## Installation
 
 ```bash
-npm install inspect-value-element
+npm install inspect-value
 ```
 
 ## Integration Pattern
@@ -20,7 +20,7 @@ npm install inspect-value-element
 React can't pass complex objects via JSX attributes to custom elements. Use `useRef` + `useEffect` to set the `.value` property imperatively:
 
 ```tsx
-import 'inspect-value-element';
+import 'inspect-value';
 import { useRef, useEffect } from 'react';
 
 function Inspector({ data }: { data: any }) {
@@ -97,7 +97,7 @@ A fixed-position drawer for persistent state inspection.
 The package includes JSX type declarations. Add the types to your project:
 
 ```ts
-/// <reference types="inspect-value-element/dist/index" />
+/// <reference types="inspect-value/dist/index" />
 ```
 
 Or add to your `tsconfig.json`:
@@ -105,7 +105,7 @@ Or add to your `tsconfig.json`:
 ```json
 {
   "compilerOptions": {
-    "types": ["inspect-value-element/dist/index"]
+    "types": ["inspect-value/dist/index"]
   }
 }
 ```

@@ -427,7 +427,7 @@ function UsageDemo() {
       <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#52525b', marginBottom: '0.4rem' }}>
         React hook pattern
       </div>
-      <CodeBlock>{`import 'inspect-value-element'
+      <CodeBlock>{`import 'inspect-value'
 import { useRef, useEffect } from 'react'
 
 function useInspect(value) {

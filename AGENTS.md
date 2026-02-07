@@ -1,4 +1,4 @@
-# inspect-value-element — AGENTS.md
+# inspect-value — AGENTS.md
 
 **Project**: Web Component wrapper for svelte-inspect-value
 **Stack**: Svelte 5, TypeScript, Vite

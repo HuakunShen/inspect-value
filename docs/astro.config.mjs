@@ -7,12 +7,12 @@ import svelte from '@astrojs/svelte';
 export default defineConfig({
   integrations: [
     starlight({
-      title: 'inspect-value-element',
+      title: 'inspect-value',
       social: [
         {
           icon: 'github',
           label: 'GitHub',
-          href: 'https://github.com/user/inspect-value-element',
+          href: 'https://github.com/HuakunShen/inspect-value',
         },
       ],
       sidebar: [

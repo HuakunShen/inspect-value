@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "inspect-value-element",
+      "name": "inspect-value",
       "devDependencies": {
         "@sveltejs/vite-plugin-svelte": "^6.2.4",
         "@types/react": "^19.2.13",

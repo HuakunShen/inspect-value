@@ -1,5 +1,5 @@
 /**
- * Type declarations for inspect-value-element custom elements.
+ * Type declarations for inspect-value custom elements.
  *
  * The `theme` and `search` types are derived from svelte-inspect-value's
  * InspectOptions so they stay in sync with upstream automatically.

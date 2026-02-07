@@ -1,4 +1,4 @@
-# inspect-value-element
+# inspect-value
 
 [svelte-inspect-value](https://github.com/ampled/svelte-inspect-value) as a **Web Component** — use in React, Vue, Angular, or plain HTML.
 
@@ -7,7 +7,7 @@ Zero performance overhead. The same Svelte-compiled code runs inside a standard 
 ## Install
 
 ```bash
-npm install inspect-value-element
+npm install inspect-value
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ npm install inspect-value-element
 ### Plain HTML / Vanilla JS
 
 ```html
-<script src="https://unpkg.com/inspect-value-element"></script>
+<script src="https://unpkg.com/inspect-value"></script>
 
 <inspect-value id="inspector"></inspect-value>
 
@@ -32,7 +32,7 @@ npm install inspect-value-element
 ### React
 
 ```tsx
-import 'inspect-value-element';
+import 'inspect-value';
 import { useRef, useEffect } from 'react';
 
 function Inspector({ data }: { data: any }) {
@@ -67,7 +67,7 @@ function App() {
 
 ```tsx
 // InspectValue.tsx — optional convenience wrapper
-import 'inspect-value-element';
+import 'inspect-value';
 import { useRef, useEffect, type HTMLAttributes } from 'react';
 
 interface InspectValueProps extends HTMLAttributes<HTMLElement> {
@@ -109,7 +109,7 @@ export function InspectValue({ value, name, theme, search, depth, expandAll, ...
 
 ```vue
 <script setup>
-import 'inspect-value-element';
+import 'inspect-value';
 import { ref } from 'vue';
 
 const data = ref({
@@ -140,7 +140,7 @@ const data = ref({
 ```typescript
 // app.module.ts
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import 'inspect-value-element';
+import 'inspect-value';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

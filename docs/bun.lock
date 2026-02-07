@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "inspect-value-element-docs",
+      "name": "inspect-value-docs",
       "dependencies": {
         "@astrojs/react": "^4.2.0",
         "@astrojs/starlight": "^0.34.0",

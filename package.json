@@ -1,5 +1,5 @@
 {
-  "name": "inspect-value-element",
+  "name": "inspect-value",
   "version": "0.0.1",
   "description": "svelte-inspect-value as a Web Component — use in React, Vue, or any framework",
   "type": "module",
