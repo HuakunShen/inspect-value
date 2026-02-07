@@ -1,0 +1,206 @@
+---
+title: Angular
+description: Using inspect-value-element in Angular applications
+---
+
+## Installation
+
+```bash
+npm install inspect-value-element
+```
+
+## Setup
+
+### 1. Allow custom elements
+
+Add `CUSTOM_ELEMENTS_SCHEMA` to your component or module:
+
+```ts
+// app.component.ts
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  templateUrl: './app.component.html',
+})
+export class AppComponent {}
+```
+
+### 2. Import the web component
+
+Import the library in your main entry point so the custom elements are registered:
+
+```ts
+// main.ts
+import 'inspect-value-element';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+
+bootstrapApplication(AppComponent);
+```
+
+## Integration Pattern
+
+Use `@ViewChild` to get a reference to the element, then set the `.value` property:
+
+```ts
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+
+@Component({
+  selector: 'app-inspector',
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  template: `
+    <inspect-value #inspector name="appState"></inspect-value>
+
+    <button (click)="update()">Update</button>
+  `,
+})
+export class InspectorComponent implements AfterViewInit {
+  @ViewChild('inspector') inspectorRef!: ElementRef;
+
+  data = {
+    user: { name: 'Ada', role: 'admin' },
+    items: [1, 2, 3],
+    timestamp: new Date(),
+  };
+
+  ngAfterViewInit() {
+    this.setInspectorValue();
+  }
+
+  update() {
+    this.data = {
+      ...this.data,
+      timestamp: new Date(),
+    };
+    this.setInspectorValue();
+  }
+
+  private setInspectorValue() {
+    const el = this.inspectorRef.nativeElement;
+    el.value = this.data;
+  }
+}
+```
+
+## Theme Switching
+
+```ts
+@Component({
+  selector: 'app-themed-inspector',
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  template: `
+    <div>
+      <select (change)="onThemeChange($event)">
+        <option *ngFor="let t of themes" [value]="t">{{ t }}</option>
+      </select>
+      <inspect-value #inspector name="data"></inspect-value>
+    </div>
+  `,
+})
+export class ThemedInspectorComponent implements AfterViewInit {
+  @ViewChild('inspector') inspectorRef!: ElementRef;
+
+  themes = ['inspect', 'drak', 'stereo', 'dark', 'default-dark', 'default-light'];
+  currentTheme = 'inspect';
+
+  data = {
+    id: 1,
+    name: 'Ada Lovelace',
+    roles: ['admin', 'developer'],
+  };
+
+  ngAfterViewInit() {
+    this.updateInspector();
+  }
+
+  onThemeChange(event: Event) {
+    this.currentTheme = (event.target as HTMLSelectElement).value;
+    this.updateInspector();
+  }
+
+  private updateInspector() {
+    const el = this.inspectorRef.nativeElement;
+    el.value = this.data;
+    el.theme = this.currentTheme;
+  }
+}
+```
+
+## Panel Component
+
+```ts
+@Component({
+  selector: 'app-debug-panel',
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  template: `
+    <button (click)="togglePanel()">Toggle Debug Panel</button>
+    <inspect-panel #panel name="Debug" position="bottom-right"></inspect-panel>
+  `,
+})
+export class DebugPanelComponent implements AfterViewInit {
+  @ViewChild('panel') panelRef!: ElementRef;
+  isOpen = false;
+
+  ngAfterViewInit() {
+    this.updatePanel();
+  }
+
+  togglePanel() {
+    this.isOpen = !this.isOpen;
+    this.updatePanel();
+  }
+
+  private updatePanel() {
+    const el = this.panelRef.nativeElement;
+    el.value = { route: '/dashboard', user: { name: 'Ada' } };
+    el.open = this.isOpen;
+  }
+}
+```
+
+## Reactive Updates with Signals
+
+With Angular signals (v16+):
+
+```ts
+import { Component, ViewChild, ElementRef, AfterViewInit, signal, effect } from '@angular/core';
+
+@Component({
+  selector: 'app-reactive-inspector',
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  template: `
+    <inspect-value #inspector name="state"></inspect-value>
+    <button (click)="increment()">Increment</button>
+  `,
+})
+export class ReactiveInspectorComponent implements AfterViewInit {
+  @ViewChild('inspector') inspectorRef!: ElementRef;
+
+  count = signal(0);
+
+  constructor() {
+    effect(() => {
+      if (!this.inspectorRef) return;
+      this.inspectorRef.nativeElement.value = {
+        count: this.count(),
+        timestamp: new Date().toISOString(),
+      };
+    });
+  }
+
+  increment() {
+    this.count.update((c) => c + 1);
+  }
+
+  ngAfterViewInit() {
+    this.inspectorRef.nativeElement.value = { count: this.count() };
+  }
+}
+```

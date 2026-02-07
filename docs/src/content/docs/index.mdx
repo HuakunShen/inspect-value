@@ -1,0 +1,43 @@
+---
+title: inspect-value-element
+description: svelte-inspect-value as a framework-agnostic Web Component
+template: splash
+hero:
+  tagline: A powerful JavaScript value inspector — use in React, Vue, Svelte, Angular, or plain HTML.
+  actions:
+    - text: Get Started
+      link: /getting-started/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/user/inspect-value-element
+      variant: minimal
+---
+
+import AllTypesDemo from '../../components/react/AllTypesDemo.tsx';
+import DemoSection from '../../components/shared/DemoSection.astro';
+
+<DemoSection title="Live Demo" description="Every JavaScript built-in type, rendered in the browser with a single web component.">
+  <AllTypesDemo client:only="react" />
+</DemoSection>
+
+## What is this?
+
+`inspect-value-element` wraps [svelte-inspect-value](https://github.com/user/svelte-inspect-value) as a **Web Component** (`<inspect-value>`, `<inspect-panel>`). Styles are encapsulated in Shadow DOM — just import the script and use the element.
+
+### Features
+
+- **All JS types** — strings, numbers, booleans, arrays, objects, Date, RegExp, URL, Map, Set, Error, TypedArray, Promises, Functions, and more
+- **6 built-in themes** — `inspect`, `drak`, `stereo`, `dark`, `default-dark`, `default-light`
+- **Deep search** — filter, filter-strict, and highlight modes
+- **Panel mode** — fixed-position overlay for persistent debugging
+- **Zero config** — import the script, use the element
+
+### Framework Support
+
+| Framework | Integration | Live Demos |
+|-----------|-------------|------------|
+| [React](/guides/react/) | `useRef` + `useEffect` | 4 interactive demos |
+| [Vue](/guides/vue/) | `ref()` + `onMounted` | 4 interactive demos |
+| [Svelte](/guides/svelte/) | `bind:this` + `$effect` | 4 interactive demos |
+| [Angular](/guides/angular/) | `@ViewChild` + `CUSTOM_ELEMENTS_SCHEMA` | Code examples |
+| [Vanilla JS](/guides/vanilla/) | `querySelector` + `.value` | Code examples |

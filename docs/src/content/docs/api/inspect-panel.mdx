@@ -1,0 +1,76 @@
+---
+title: <inspect-panel>
+description: API reference for the inspect-panel web component
+---
+
+The `<inspect-panel>` element renders a fixed-position overlay panel for persistent value inspection during development.
+
+## Usage
+
+```html
+<inspect-panel open position="bottom-right"></inspect-panel>
+
+<script>
+  const panel = document.querySelector('inspect-panel');
+  panel.value = {
+    route: '/dashboard',
+    user: { name: 'Ada', role: 'admin' },
+  };
+</script>
+```
+
+## Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `value` | `any` | `undefined` | A single value to inspect. |
+| `values` | `any` | `undefined` | Multiple values to inspect (displayed as a list). |
+| `name` | `string` | `''` | Label displayed in the panel header. |
+| `theme` | `string` | `'inspect'` | Color theme. One of: `inspect`, `drak`, `stereo`, `dark`, `default-dark`, `default-light`. |
+| `search` | `boolean \| string` | `false` | Enable search. Set to `'filter'`, `'filter-strict'`, or `'highlight'`. |
+| `depth` | `number` | `Infinity` | Max expansion depth. |
+| `position` | `string` | `'bottom-right'` | Panel position. One of: `bottom-right`, `bottom-left`, `top-right`, `top-left`. |
+| `open` | `boolean` | `false` | Whether the panel is expanded. |
+| `height` | `string` | `'40vh'` | Panel height when open. Any CSS length value. |
+| `width` | `string` | `'100%'` | Panel width. Any CSS length value. |
+| `showTypes` | `boolean` | `true` | Show type annotations. |
+| `showLength` | `boolean` | `true` | Show collection lengths. |
+| `showPreview` | `boolean` | `true` | Show inline previews. |
+
+## Positions
+
+The `position` property controls where the panel anchors:
+
+| Value | Description |
+|-------|-------------|
+| `bottom-right` | Fixed to bottom-right corner (default) |
+| `bottom-left` | Fixed to bottom-left corner |
+| `top-right` | Fixed to top-right corner |
+| `top-left` | Fixed to top-left corner |
+
+## Examples
+
+### Basic panel
+
+```js
+const panel = document.querySelector('inspect-panel');
+panel.value = appState;
+panel.open = true;
+```
+
+### Custom size and position
+
+```js
+panel.position = 'top-left';
+panel.height = '60vh';
+panel.width = '400px';
+panel.open = true;
+```
+
+### With search
+
+```js
+panel.value = largeStateTree;
+panel.search = 'filter';
+panel.open = true;
+```

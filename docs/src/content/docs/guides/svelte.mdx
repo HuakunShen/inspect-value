@@ -1,0 +1,101 @@
+---
+title: Svelte
+description: Using inspect-value-element in Svelte applications
+---
+
+import AllTypesDemo from '../../../components/svelte/AllTypesDemo.svelte';
+import ThemeSwitcherDemo from '../../../components/svelte/ThemeSwitcherDemo.svelte';
+import DynamicUpdatesDemo from '../../../components/svelte/DynamicUpdatesDemo.svelte';
+import SearchDemo from '../../../components/svelte/SearchDemo.svelte';
+import DemoSection from '../../../components/shared/DemoSection.astro';
+
+## Installation
+
+```bash
+npm install inspect-value-element
+```
+
+:::note
+If you're using Svelte directly (not as a web component), consider using [svelte-inspect-value](https://github.com/user/svelte-inspect-value) instead for a native Svelte experience.
+:::
+
+## Integration Pattern
+
+Use `bind:this` to get a reference to the element, then set properties in a `$effect`:
+
+```svelte
+<script>
+  import 'inspect-value-element';
+
+  let el;
+  let data = $state({ hello: 'world', items: [1, 2, 3] });
+
+  $effect(() => {
+    if (!el) return;
+    el.value = data;
+  });
+</script>
+
+<inspect-value bind:this={el} name="myData" theme="inspect" />
+```
+
+## Live Demos
+
+### All JavaScript Types
+
+Every built-in JS type rendered with specialized formatting.
+
+<DemoSection title="All Types" description="Strings, numbers, booleans, arrays, objects, Date, RegExp, URL, Map, Set, Error, TypedArray — all expanded.">
+  <AllTypesDemo client:only="svelte" />
+</DemoSection>
+
+### Theme Switcher
+
+Switch between 6 built-in themes using Svelte 5 runes.
+
+<DemoSection title="Themes" description="Click a theme button to switch. The $effect reactively updates the element's theme property.">
+  <ThemeSwitcherDemo client:only="svelte" />
+</DemoSection>
+
+### Dynamic Updates
+
+Mutate state with Svelte 5 runes and watch the inspector react in real time.
+
+<DemoSection title="Dynamic Updates" description="Click the buttons to modify state. The $effect keeps the inspector in sync.">
+  <DynamicUpdatesDemo client:only="svelte" />
+</DemoSection>
+
+### Search & Filter
+
+Deep search across nested structures with three modes.
+
+<DemoSection title="Search & Filter" description="Switch between filter, filter-strict, and highlight modes. The search bar is built into the component.">
+  <SearchDemo client:only="svelte" />
+</DemoSection>
+
+## Svelte 5 Runes Pattern
+
+The recommended pattern with Svelte 5 runes:
+
+```svelte
+<script>
+  import 'inspect-value-element';
+
+  let el = $state();
+  let theme = $state('inspect');
+  let myData = $state({ count: 0 });
+
+  // Reactive updates — runs whenever theme or myData changes
+  $effect(() => {
+    if (!el) return;
+    el.value = myData;
+    el.theme = theme;
+  });
+</script>
+
+<inspect-value bind:this={el} name="state" />
+
+<button onclick={() => myData = { ...myData, count: myData.count + 1 }}>
+  Increment
+</button>
+```

@@ -1,0 +1,100 @@
+---
+title: Vanilla JavaScript
+description: Using inspect-value-element with plain HTML and JavaScript
+---
+
+No framework needed — just import the script and use the elements.
+
+## Via CDN
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <inspect-value id="demo" name="myData"></inspect-value>
+
+    <script type="module" src="https://unpkg.com/inspect-value-element"></script>
+    <script type="module">
+      const el = document.getElementById('demo');
+
+      el.value = {
+        string: 'hello',
+        number: 42,
+        array: [1, 2, 3],
+        nested: {
+          map: new Map([['key', 'value']]),
+          set: new Set([1, 2, 3]),
+          date: new Date(),
+        },
+      };
+    </script>
+  </body>
+</html>
+```
+
+## Via bundler
+
+```bash
+npm install inspect-value-element
+```
+
+```js
+import 'inspect-value-element';
+
+const el = document.createElement('inspect-value');
+el.value = { hello: 'world' };
+el.name = 'demo';
+el.theme = 'drak';
+document.body.appendChild(el);
+```
+
+## Setting properties dynamically
+
+```js
+const el = document.querySelector('inspect-value');
+
+// Update value
+el.value = fetchedData;
+
+// Change theme
+el.theme = 'dark';
+
+// Enable search
+el.search = 'filter';
+
+// Expand all nodes
+el.expandAll = true;
+```
+
+## Panel component
+
+```html
+<inspect-panel id="panel" name="App State"></inspect-panel>
+
+<script type="module">
+  const panel = document.getElementById('panel');
+  panel.value = {
+    route: window.location.pathname,
+    user: { name: 'Ada', authenticated: true },
+  };
+  panel.position = 'bottom-right';
+  panel.open = true;
+</script>
+```
+
+## Listening to updates
+
+Since the web component uses Shadow DOM, you can observe property changes:
+
+```js
+const el = document.querySelector('inspect-value');
+
+// Update on an interval
+setInterval(() => {
+  el.value = {
+    timestamp: new Date().toISOString(),
+    random: Math.random(),
+    memory: performance.memory?.usedJSHeapSize,
+  };
+}, 1000);
+```

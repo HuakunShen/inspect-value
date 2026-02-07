@@ -1,0 +1,91 @@
+---
+title: Getting Started
+description: Install and use inspect-value-element in your project
+---
+
+## Installation
+
+```bash
+npm install inspect-value-element
+```
+
+Or with other package managers:
+
+```bash
+pnpm add inspect-value-element
+yarn add inspect-value-element
+bun add inspect-value-element
+```
+
+## Quick Start
+
+### Via CDN (simplest)
+
+```html
+<script type="module" src="https://unpkg.com/inspect-value-element"></script>
+
+<inspect-value id="demo"></inspect-value>
+
+<script>
+  document.getElementById('demo').value = {
+    hello: 'world',
+    items: [1, 2, 3],
+    nested: { deep: true },
+  };
+</script>
+```
+
+### Via bundler (React, Vue, Svelte, etc.)
+
+```js
+import 'inspect-value-element';
+```
+
+That single import registers both `<inspect-value>` and `<inspect-panel>` as custom elements. Then use them in your templates.
+
+## Key Concepts
+
+### Setting values via properties
+
+The `value` prop accepts **any** JavaScript value — objects, arrays, Maps, Sets, Promises, etc. Because HTML attributes can only hold strings, you **must** set complex values via the DOM property:
+
+```js
+const el = document.querySelector('inspect-value');
+el.value = { anything: 'goes here', map: new Map() };
+```
+
+Each framework has its own idiomatic way of doing this — see the [framework guides](/guides/react/).
+
+### Shadow DOM
+
+Styles are fully encapsulated inside the Shadow DOM. The component won't leak styles into your page and your page styles won't affect the inspector.
+
+### Themes
+
+Set the `theme` attribute or property to switch between built-in themes:
+
+```html
+<inspect-value theme="drak"></inspect-value>
+```
+
+Available themes: `inspect` (default), `drak`, `stereo`, `dark`, `default-dark`, `default-light`.
+
+### Search
+
+Enable the built-in search bar by setting the `search` property:
+
+```js
+el.search = 'filter';       // hide non-matching nodes
+el.search = 'filter-strict'; // hide non-matching leaves
+el.search = 'highlight';     // highlight matches, show all
+```
+
+### Panel Component
+
+`<inspect-panel>` provides a fixed-position overlay panel, ideal for persistent state inspection during development:
+
+```html
+<inspect-panel open position="bottom-right"></inspect-panel>
+```
+
+See the full [API reference](/api/inspect-value/) for all available props.

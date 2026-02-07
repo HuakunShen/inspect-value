@@ -1,0 +1,122 @@
+---
+title: Vue
+description: Using inspect-value-element in Vue applications
+---
+
+import AllTypesDemo from '../../../components/vue/AllTypesDemo.vue';
+import ThemeSwitcherDemo from '../../../components/vue/ThemeSwitcherDemo.vue';
+import EditableJsonDemo from '../../../components/vue/EditableJsonDemo.vue';
+import SearchDemo from '../../../components/vue/SearchDemo.vue';
+import DemoSection from '../../../components/shared/DemoSection.astro';
+
+## Installation
+
+```bash
+npm install inspect-value-element
+```
+
+## Integration Pattern
+
+Vue can pass properties to custom elements using the `.prop` modifier:
+
+```vue
+<script setup>
+import 'inspect-value-element';
+import { ref } from 'vue';
+
+const data = ref({ hello: 'world', items: [1, 2, 3] });
+</script>
+
+<template>
+  <inspect-value :value.prop="data" name="myData" theme="inspect" />
+</template>
+```
+
+For more control, use `ref()` + `onMounted`:
+
+```vue
+<script setup>
+import 'inspect-value-element';
+import { ref, onMounted, watch } from 'vue';
+
+const el = ref(null);
+const data = ref({ hello: 'world' });
+
+function update() {
+  if (!el.value) return;
+  el.value.value = data.value;
+}
+
+onMounted(update);
+watch(data, update, { deep: true });
+</script>
+
+<template>
+  <inspect-value ref="el" name="myData" />
+</template>
+```
+
+### Vite config for custom elements
+
+Tell Vue's template compiler to treat `inspect-*` tags as custom elements:
+
+```js
+// vite.config.js
+import vue from '@vitejs/plugin-vue';
+
+export default {
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.startsWith('inspect-'),
+        },
+      },
+    }),
+  ],
+};
+```
+
+## Live Demos
+
+### All JavaScript Types
+
+Every built-in JS type rendered with specialized formatting.
+
+<DemoSection title="All Types" description="Strings, numbers, booleans, arrays, objects, Date, RegExp, URL, Map, Set, Error, TypedArray — all expanded.">
+  <AllTypesDemo client:only="vue" />
+</DemoSection>
+
+### Theme Switcher
+
+Switch between 6 built-in themes.
+
+<DemoSection title="Themes" description="Click a theme button to switch. The inspector re-renders instantly.">
+  <ThemeSwitcherDemo client:only="vue" />
+</DemoSection>
+
+### Editable JSON
+
+Edit JSON in the textarea and see the live inspector update. A natural fit for Vue's `v-model`.
+
+<DemoSection title="Editable JSON" description="Type or paste JSON on the left. The inspector on the right updates as you type.">
+  <EditableJsonDemo client:only="vue" />
+</DemoSection>
+
+### Search & Filter
+
+Deep search across nested structures with three modes.
+
+<DemoSection title="Search & Filter" description="Switch between filter, filter-strict, and highlight modes. The search bar is built into the component.">
+  <SearchDemo client:only="vue" />
+</DemoSection>
+
+## TypeScript
+
+The package includes Vue type declarations. Types are available after import:
+
+```ts
+import 'inspect-value-element';
+```
+
+The `GlobalComponents` interface is augmented so `<inspect-value>` and `<inspect-panel>` get autocomplete in Vue templates.

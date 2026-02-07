@@ -1,0 +1,111 @@
+---
+title: React
+description: Using inspect-value-element in React applications
+---
+
+import AllTypesDemo from '../../../components/react/AllTypesDemo.tsx';
+import ThemeSwitcherDemo from '../../../components/react/ThemeSwitcherDemo.tsx';
+import DynamicUpdatesDemo from '../../../components/react/DynamicUpdatesDemo.tsx';
+import PanelDemo from '../../../components/react/PanelDemo.tsx';
+import DemoSection from '../../../components/shared/DemoSection.astro';
+
+## Installation
+
+```bash
+npm install inspect-value-element
+```
+
+## Integration Pattern
+
+React can't pass complex objects via JSX attributes to custom elements. Use `useRef` + `useEffect` to set the `.value` property imperatively:
+
+```tsx
+import 'inspect-value-element';
+import { useRef, useEffect } from 'react';
+
+function Inspector({ data }: { data: any }) {
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      (ref.current as any).value = data;
+    }
+  }, [data]);
+
+  return <inspect-value ref={ref} name="myData" theme="inspect" />;
+}
+```
+
+### Reusable hook
+
+```tsx
+function useInspect<T>(value: T, props?: Record<string, unknown>) {
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    (ref.current as any).value = value;
+  }, [value]);
+
+  useEffect(() => {
+    if (!ref.current || !props) return;
+    for (const [k, v] of Object.entries(props)) {
+      (ref.current as any)[k] = v;
+    }
+  }, [props]);
+
+  return ref;
+}
+```
+
+## Live Demos
+
+### All JavaScript Types
+
+Every built-in JS type rendered with specialized formatting.
+
+<DemoSection title="All Types" description="Strings, numbers, booleans, arrays, objects, Date, RegExp, URL, Map, Set, Error, TypedArray — all expanded.">
+  <AllTypesDemo client:only="react" />
+</DemoSection>
+
+### Theme Switcher
+
+Switch between 6 built-in themes. Each theme is applied by setting the `theme` property.
+
+<DemoSection title="Themes" description="Click a theme button to switch. The inspector re-renders instantly.">
+  <ThemeSwitcherDemo client:only="react" />
+</DemoSection>
+
+### Dynamic Updates
+
+Mutate React state and watch the inspector react in real time. Values flash on update.
+
+<DemoSection title="Dynamic Updates" description="Click the buttons to modify state. The inspector updates reactively via useEffect.">
+  <DynamicUpdatesDemo client:only="react" />
+</DemoSection>
+
+### Panel Component
+
+A fixed-position drawer for persistent state inspection.
+
+<DemoSection title="Panel" description="Toggle the panel open and change its position. It renders as a fixed overlay.">
+  <PanelDemo client:only="react" />
+</DemoSection>
+
+## TypeScript
+
+The package includes JSX type declarations. Add the types to your project:
+
+```ts
+/// <reference types="inspect-value-element/dist/index" />
+```
+
+Or add to your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "types": ["inspect-value-element/dist/index"]
+  }
+}
+```

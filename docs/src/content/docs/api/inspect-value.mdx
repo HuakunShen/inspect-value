@@ -1,0 +1,76 @@
+---
+title: <inspect-value>
+description: API reference for the inspect-value web component
+---
+
+The `<inspect-value>` element renders any JavaScript value as an interactive, syntax-highlighted inspector tree.
+
+## Usage
+
+```html
+<inspect-value></inspect-value>
+
+<script>
+  const el = document.querySelector('inspect-value');
+  el.value = { hello: 'world' };
+</script>
+```
+
+## Properties
+
+All properties can be set via JavaScript. Primitive-valued properties (`name`, `theme`, `depth`) can also be set as HTML attributes.
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `value` | `any` | `undefined` | The value to inspect. Must be set via the DOM property (not attribute) for non-primitive values. |
+| `name` | `string` | `''` | Label displayed before the value. |
+| `theme` | `string` | `'inspect'` | Color theme. One of: `inspect`, `drak`, `stereo`, `dark`, `default-dark`, `default-light`. |
+| `search` | `boolean \| string` | `false` | Enable search. Set to `'filter'`, `'filter-strict'`, or `'highlight'` to choose the mode. |
+| `depth` | `number` | `Infinity` | Max expansion depth. Nodes deeper than this start collapsed. |
+| `showTypes` | `boolean` | `true` | Show type annotations next to values. |
+| `showLength` | `boolean` | `true` | Show collection lengths (e.g., `Array(3)`). |
+| `showPreview` | `boolean` | `true` | Show inline previews for collapsed objects/arrays. |
+| `expandAll` | `boolean` | `false` | Expand all nodes on render. |
+
+## Supported Types
+
+The inspector provides specialized rendering for:
+
+- **Primitives** — string, number, bigint, boolean, null, undefined, symbol
+- **Objects** — plain objects, nested objects
+- **Arrays** — with index display and nested expansion
+- **Date** — formatted date display
+- **RegExp** — regex literal syntax
+- **URL** — clickable URL display
+- **Map / Set** — key-value pairs and entries
+- **Error** — error name, message, and stack
+- **Promise** — pending / resolved / rejected states
+- **Function** — function name, params, and body
+- **TypedArray** — Float64Array, Uint8Array, etc.
+- **Class instances** — constructor name and properties
+
+## Examples
+
+### Basic
+
+```js
+el.value = 'hello world';
+el.name = 'greeting';
+```
+
+### With options
+
+```js
+el.value = { deeply: { nested: { data: [1, 2, 3] } } };
+el.theme = 'drak';
+el.depth = 2;
+el.showTypes = false;
+```
+
+### Search mode
+
+```js
+el.value = largeDataStructure;
+el.search = 'filter';
+el.expandAll = true;
+```
