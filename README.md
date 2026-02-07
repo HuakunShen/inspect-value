@@ -1,8 +1,16 @@
 # inspect-value
 
+![NPM Version](https://img.shields.io/npm/v/inspect-value)
+
+![](https://imgur.com/5q7LRgp.jpg)
+
 [svelte-inspect-value](https://github.com/ampled/svelte-inspect-value) as a **Web Component** — use in React, Vue, Angular, or plain HTML.
 
 Zero performance overhead. The same Svelte-compiled code runs inside a standard Custom Element.
+
+## Acknowledgement
+
+This package is a Web Component wrapper around [svelte-inspect-value](https://github.com/ampled/svelte-inspect-value) by [ampled](https://github.com/ampled). All core functionality, themes, and inspection capabilities come from the original Svelte library. This wrapper simply exposes it as standard Custom Elements for use in any framework or vanilla JS project.
 
 ## Install
 
@@ -222,6 +230,22 @@ This package is a thin Web Component shell around [svelte-inspect-value](https:/
 `dist/index.d.ts` is generated at build time by `scripts/resolve-types.mjs`. This script uses the TypeScript compiler API to resolve property types (like `theme`, `search`) directly from `svelte-inspect-value`'s `InspectOptions` type, then emits a standalone `.d.ts` with no external imports. This keeps the published types in sync with upstream without requiring consumers to install `svelte-inspect-value`.
 
 The build command runs: `vite build && sh scripts/build-types.sh`
+
+## AI Assistant Support
+
+This package includes a [`SKILL.md`](./SKILL.md) file for AI assistants. Copy it to your project's `.claude/skills/inspect-value/` directory (or your AI's equivalent skill directory) to enable context-aware code generation:
+
+```bash
+# For Claude Code
+mkdir -p .claude/skills/inspect-value
+cp node_modules/inspect-value/SKILL.md .claude/skills/inspect-value/
+```
+
+The skill file provides AI agents with:
+- Framework-specific usage patterns (React, Vue, Angular, Svelte)
+- The critical "Property vs Attribute" rule
+- Common pitfalls and their solutions
+- Component API reference
 
 ## License
 

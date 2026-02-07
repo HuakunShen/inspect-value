@@ -5,6 +5,8 @@ import vue from '@astrojs/vue';
 import svelte from '@astrojs/svelte';
 
 export default defineConfig({
+  site: 'https://huakunshen.github.io',
+  base: '/inspect-value',
   integrations: [
     starlight({
       title: 'inspect-value',
