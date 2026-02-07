@@ -193,18 +193,35 @@ Fixed-position panel variant.
 > **Important**: Complex data (objects, arrays, etc.) must be set via JavaScript property, not HTML attribute.
 > HTML attributes only support strings.
 
+## Documentation
+
+The full docs site is built with [Astro Starlight](https://starlight.astro.build/) and includes live interactive demos for React, Vue, and Svelte, plus code-only guides for Vanilla JS and Angular.
+
+```bash
+npm run docs:dev     # start docs dev server at localhost:4321
+npm run docs:build   # static build
+npm run docs:preview # preview built docs
+```
+
 ## Development
 
 ```bash
 npm install
 npm run dev      # dev server with demo page at localhost:5173
-npm run build    # build to dist/
+npm run play     # React playground demo
+npm run build    # build to dist/ (library + types)
 npm run preview  # preview built output
 ```
 
 ## How it works
 
 This package is a thin Web Component shell around [svelte-inspect-value](https://github.com/ampled/svelte-inspect-value). Svelte compiles the wrapper components as Custom Elements (`<svelte:options customElement="inspect-value" />`), while the library's internals run as normal Svelte code inside the Shadow DOM. There is no framework bridge, no serialization layer — the exact same Svelte-compiled code runs.
+
+### Type generation
+
+`dist/index.d.ts` is generated at build time by `scripts/resolve-types.mjs`. This script uses the TypeScript compiler API to resolve property types (like `theme`, `search`) directly from `svelte-inspect-value`'s `InspectOptions` type, then emits a standalone `.d.ts` with no external imports. This keeps the published types in sync with upstream without requiring consumers to install `svelte-inspect-value`.
+
+The build command runs: `vite build && sh scripts/build-types.sh`
 
 ## License
 
