@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>inspect-value-element Demo</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        background: #1a1a1a;
+        color: #eee;
+      }
+      h1 { margin-bottom: 0.5rem; }
+      p { color: #999; margin-bottom: 2rem; }
+      .demo-section {
+        margin-bottom: 2rem;
+        padding: 1rem;
+        border: 1px solid #333;
+        border-radius: 8px;
+      }
+      .demo-section h2 {
+        margin-top: 0;
+        font-size: 1rem;
+        color: #888;
+      }
+      button {
+        background: #333;
+        color: #eee;
+        border: 1px solid #555;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 0.5rem;
+      }
+      button:hover { background: #444; }
+    </style>
+  </head>
+  <body>
+    <h1>🔍 inspect-value-element</h1>
+    <p>svelte-inspect-value as a Web Component — works anywhere</p>
+
+    <!-- Basic usage -->
+    <div class="demo-section">
+      <h2>Basic Object</h2>
+      <inspect-value id="demo-basic"></inspect-value>
+    </div>
+
+    <!-- With name -->
+    <div class="demo-section">
+      <h2>Named Value</h2>
+      <inspect-value id="demo-named" name="apiResponse"></inspect-value>
+    </div>
+
+    <!-- With search -->
+    <div class="demo-section">
+      <h2>With Search (try typing "email")</h2>
+      <inspect-value id="demo-search"></inspect-value>
+    </div>
+
+    <!-- Dynamic update -->
+    <div class="demo-section">
+      <h2>Dynamic Updates</h2>
+      <button id="btn-update">Update Value</button>
+      <button id="btn-add">Add Item</button>
+      <inspect-value id="demo-dynamic" name="liveData"></inspect-value>
+    </div>
+
+    <!-- Dev mode via script (simulates what a CDN user would do) -->
+    <script type="module" src="/src/index.ts"></script>
+
+    <script type="module">
+      // Wait for custom elements to be defined
+      await customElements.whenDefined('inspect-value');
+
+      // Demo 1: Basic object
+      document.getElementById('demo-basic').value = {
+        string: 'hello world',
+        number: 42,
+        boolean: true,
+        null: null,
+        array: [1, 2, 3, { nested: true }],
+        object: {
+          a: 1,
+          b: { c: { d: 'deep' } },
+        },
+        date: new Date(),
+        regex: /test/gi,
+        map: new Map([['key1', 'value1'], ['key2', 'value2']]),
+        set: new Set([1, 2, 3]),
+        url: new URL('https://example.com/path?q=search'),
+        fn: function hello(name) { return `hi ${name}`; },
+        promise: Promise.resolve('done'),
+      };
+
+      // Demo 2: Named value
+      document.getElementById('demo-named').value = {
+        status: 200,
+        data: {
+          users: [
+            { id: 1, name: 'Alice', email: 'alice@example.com' },
+            { id: 2, name: 'Bob', email: 'bob@example.com' },
+          ],
+          pagination: { page: 1, total: 42 },
+        },
+      };
+
+      // Demo 3: Search enabled
+      const searchEl = document.getElementById('demo-search');
+      searchEl.search = 'filter';
+      searchEl.value = {
+        users: [
+          { id: 1, name: 'Alice', email: 'alice@example.com', role: 'admin' },
+          { id: 2, name: 'Bob', email: 'bob@corp.com', role: 'user' },
+          { id: 3, name: 'Charlie', email: 'charlie@example.com', role: 'user' },
+        ],
+        settings: {
+          notifications: { email: true, sms: false },
+          theme: 'dark',
+        },
+      };
+
+      // Demo 4: Dynamic updates
+      let counter = 0;
+      let items = ['apple', 'banana'];
+      const dynamicEl = document.getElementById('demo-dynamic');
+
+      function updateDisplay() {
+        dynamicEl.value = {
+          counter,
+          items: [...items],
+          lastUpdated: new Date().toISOString(),
+        };
+      }
+      updateDisplay();
+
+      document.getElementById('btn-update').addEventListener('click', () => {
+        counter++;
+        updateDisplay();
+      });
+
+      document.getElementById('btn-add').addEventListener('click', () => {
+        items.push(['cherry', 'date', 'elderberry', 'fig'][items.length % 4]);
+        updateDisplay();
+      });
+    </script>
+  </body>
+</html>
