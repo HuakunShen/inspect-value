@@ -14,6 +14,11 @@ export default defineConfig({
   },
   plugins: [
     svelte({
+      compilerOptions: {
+        // Keep all CSS injected in JS so it ends up inside the
+        // custom element's shadow DOM instead of an external file.
+        css: 'injected',
+      },
       dynamicCompileOptions({ filename }) {
         // Compile our wrapper components as Custom Elements,
         // everything else (library internals) as normal Svelte
