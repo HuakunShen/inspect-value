@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'docs/**'
+      - 'src/**'
+      - 'package.json'
       - '.github/workflows/docs.yml'
   workflow_dispatch:
 
@@ -29,10 +31,16 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install dependencies
+      - name: Install dependencies (root)
+        run: bun install
+
+      - name: Build library
+        run: bun run build
+
+      - name: Install dependencies (docs)
         run: cd docs && bun install
 
-      - name: Build
+      - name: Build docs
         run: cd docs && bun run build
 
       - name: Setup Pages
