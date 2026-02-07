@@ -10,7 +10,7 @@
     name = '',
 
     // Display options
-    theme = 'default',
+    theme = 'inspect',
     search = false,
     depth = Infinity,
 

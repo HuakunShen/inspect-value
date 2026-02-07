@@ -3,147 +3,686 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>inspect-value-element Demo</title>
+    <title>inspect-value-element</title>
     <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
       body {
-        font-family: system-ui, -apple-system, sans-serif;
-        max-width: 800px;
-        margin: 2rem auto;
-        padding: 0 1rem;
-        background: #1a1a1a;
-        color: #eee;
+        font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        background: #0e0e10;
+        color: #e4e4e7;
+        line-height: 1.6;
       }
-      h1 { margin-bottom: 0.5rem; }
-      p { color: #999; margin-bottom: 2rem; }
-      .demo-section {
-        margin-bottom: 2rem;
-        padding: 1rem;
-        border: 1px solid #333;
-        border-radius: 8px;
+
+      /* Header */
+      .header {
+        border-bottom: 1px solid #27272a;
+        padding: 2rem 1.5rem;
       }
-      .demo-section h2 {
-        margin-top: 0;
-        font-size: 1rem;
-        color: #888;
+      .header-inner {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      .header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .header h1 code {
+        color: #a78bfa;
+        font-family: 'SF Mono', 'Fira Code', monospace;
+        font-weight: 600;
+      }
+      .header p {
+        color: #71717a;
+        margin-top: 0.25rem;
+        font-size: 0.95rem;
+      }
+      .install-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        background: #18181b;
+        border: 1px solid #27272a;
+        border-radius: 6px;
+        padding: 0.5rem 0.75rem;
+        font-family: 'SF Mono', 'Fira Code', monospace;
+        font-size: 0.85rem;
+        color: #a1a1aa;
+        width: fit-content;
+      }
+      .install-bar span { color: #4ade80; }
+
+      /* Layout */
+      .content {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 6rem;
+      }
+
+      /* Table of Contents */
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 2.5rem;
+      }
+      .toc a {
+        font-size: 0.8rem;
+        color: #a78bfa;
+        text-decoration: none;
+        padding: 0.25rem 0.75rem;
+        border: 1px solid #27272a;
+        border-radius: 999px;
+        transition: all 0.15s;
+      }
+      .toc a:hover {
+        background: #27272a;
+        border-color: #a78bfa;
+      }
+
+      /* Sections */
+      section {
+        margin-bottom: 2.5rem;
+      }
+      section h2 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #d4d4d8;
+        margin-bottom: 0.35rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      section h2 .badge {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #a78bfa;
+        background: #a78bfa18;
+        padding: 0.15rem 0.5rem;
+        border-radius: 999px;
+        font-weight: 500;
+      }
+      section > p {
+        color: #71717a;
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+      }
+      .card {
+        background: #18181b;
+        border: 1px solid #27272a;
+        border-radius: 10px;
+        padding: 1.25rem;
+        overflow: hidden;
+      }
+
+      /* Controls */
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-bottom: 1rem;
       }
       button {
-        background: #333;
-        color: #eee;
-        border: 1px solid #555;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
+        font-family: inherit;
+        font-size: 0.8rem;
+        background: #27272a;
+        color: #d4d4d8;
+        border: 1px solid #3f3f46;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
         cursor: pointer;
-        margin-right: 0.5rem;
+        transition: all 0.15s;
       }
-      button:hover { background: #444; }
+      button:hover { background: #3f3f46; }
+      button.active {
+        background: #a78bfa;
+        color: #0e0e10;
+        border-color: #a78bfa;
+        font-weight: 600;
+      }
+
+      select {
+        font-family: inherit;
+        font-size: 0.8rem;
+        background: #27272a;
+        color: #d4d4d8;
+        border: 1px solid #3f3f46;
+        padding: 0.35rem 0.5rem;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      label {
+        font-size: 0.8rem;
+        color: #a1a1aa;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        cursor: pointer;
+      }
+
+      /* Textarea */
+      textarea {
+        font-family: 'SF Mono', 'Fira Code', monospace;
+        font-size: 0.82rem;
+        background: #0e0e10;
+        color: #e4e4e7;
+        border: 1px solid #27272a;
+        border-radius: 6px;
+        padding: 0.75rem;
+        width: 100%;
+        resize: vertical;
+        line-height: 1.5;
+      }
+      textarea:focus {
+        outline: none;
+        border-color: #a78bfa;
+      }
+
+      /* Two column layout */
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      @media (max-width: 640px) {
+        .split { grid-template-columns: 1fr; }
+      }
+      .split .label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #52525b;
+        margin-bottom: 0.4rem;
+      }
+
+      /* Separator */
+      .sep {
+        border: none;
+        border-top: 1px solid #27272a;
+        margin: 0.75rem 0;
+      }
+
+      /* Code usage */
+      .usage {
+        margin-top: 1rem;
+      }
+      .usage summary {
+        font-size: 0.8rem;
+        color: #71717a;
+        cursor: pointer;
+        user-select: none;
+      }
+      .usage summary:hover { color: #a1a1aa; }
+      .usage pre {
+        margin-top: 0.5rem;
+        background: #0e0e10;
+        border: 1px solid #27272a;
+        border-radius: 6px;
+        padding: 0.75rem;
+        overflow-x: auto;
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+      .usage code {
+        font-family: 'SF Mono', 'Fira Code', monospace;
+        color: #d4d4d8;
+      }
+      .usage .comment { color: #52525b; }
+      .usage .keyword { color: #c084fc; }
+      .usage .string { color: #4ade80; }
+      .usage .prop { color: #60a5fa; }
+
+      /* Stats row */
+      .stats {
+        display: flex;
+        gap: 2rem;
+        margin-top: 0.75rem;
+      }
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #a78bfa;
+      }
+      .stat-label {
+        font-size: 0.75rem;
+        color: #52525b;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
     </style>
   </head>
   <body>
-    <h1>🔍 inspect-value-element</h1>
-    <p>svelte-inspect-value as a Web Component — works anywhere</p>
 
-    <!-- Basic usage -->
-    <div class="demo-section">
-      <h2>Basic Object</h2>
-      <inspect-value id="demo-basic"></inspect-value>
+    <!-- Header -->
+    <div class="header">
+      <div class="header-inner">
+        <h1><code>&lt;inspect-value&gt;</code></h1>
+        <p>svelte-inspect-value as a Web Component &mdash; use it anywhere, no framework required</p>
+        <div class="install-bar">
+          <span>$</span> npm install inspect-value-element
+        </div>
+      </div>
     </div>
 
-    <!-- With name -->
-    <div class="demo-section">
-      <h2>Named Value</h2>
-      <inspect-value id="demo-named" name="apiResponse"></inspect-value>
+    <!-- Content -->
+    <div class="content">
+
+      <!-- TOC -->
+      <nav class="toc">
+        <a href="#all-types">All types</a>
+        <a href="#themes">Themes</a>
+        <a href="#editable">Editable JSON</a>
+        <a href="#search">Search &amp; filter</a>
+        <a href="#map-set">Map &amp; Set</a>
+        <a href="#promises">Promises</a>
+        <a href="#functions">Functions</a>
+        <a href="#dynamic">Dynamic updates</a>
+        <a href="#panel">Panel</a>
+        <a href="#framework-usage">Framework usage</a>
+      </nav>
+
+      <!-- 1. All Types -->
+      <section id="all-types">
+        <h2>JavaScript built-in types</h2>
+        <p>Specialized views for every built-in type: strings, numbers, booleans, null, arrays, objects, Date, RegExp, URL, Map, Set, and more.</p>
+        <div class="card">
+          <inspect-value id="demo-types" name="types"></inspect-value>
+        </div>
+      </section>
+
+      <!-- 2. Themes -->
+      <section id="themes">
+        <h2>Themes <span class="badge">live switch</span></h2>
+        <p>Switch between built-in themes. Set the <code>theme</code> property on the element.</p>
+        <div class="card">
+          <div class="controls" id="theme-buttons"></div>
+          <hr class="sep">
+          <inspect-value id="demo-theme" name="userData"></inspect-value>
+        </div>
+      </section>
+
+      <!-- 3. Editable JSON -->
+      <section id="editable">
+        <h2>Editable JSON</h2>
+        <p>Paste or edit JSON on the left and see the live inspector on the right.</p>
+        <div class="card">
+          <div class="split">
+            <div>
+              <div class="label">Input</div>
+              <textarea id="json-input" rows="12">{
+  "user": {
+    "name": "Ada Lovelace",
+    "born": 1815,
+    "contributions": [
+      "First computer program",
+      "Analytical Engine notes"
+    ]
+  },
+  "languages": ["Svelte", "TypeScript", "Rust"],
+  "meta": { "version": "1.0", "draft": false }
+}</textarea>
+            </div>
+            <div>
+              <div class="label">Inspector</div>
+              <inspect-value id="demo-editable" name="parsed"></inspect-value>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Search & Filter -->
+      <section id="search">
+        <h2>Search &amp; filter <span class="badge">interactive</span></h2>
+        <p>The inspector supports deep search across nested structures. Try typing "alice" or "admin".</p>
+        <div class="card">
+          <div class="controls">
+            <label>Mode:
+              <select id="search-mode">
+                <option value="filter">filter</option>
+                <option value="filter-strict">filter-strict</option>
+                <option value="highlight">highlight</option>
+              </select>
+            </label>
+          </div>
+          <hr class="sep">
+          <inspect-value id="demo-search" name="database"></inspect-value>
+        </div>
+      </section>
+
+      <!-- 5. Map & Set -->
+      <section id="map-set">
+        <h2>Map &amp; Set</h2>
+        <p>First-class support for Map and Set with key-value and entry display.</p>
+        <div class="card">
+          <inspect-value id="demo-mapset" name="collections"></inspect-value>
+        </div>
+      </section>
+
+      <!-- 6. Promises -->
+      <section id="promises">
+        <h2>Promises <span class="badge">async</span></h2>
+        <p>Inspect promise states: pending, resolved, and rejected.</p>
+        <div class="card">
+          <div class="controls">
+            <button id="btn-new-promises">Create new promises</button>
+          </div>
+          <hr class="sep">
+          <inspect-value id="demo-promises" name="promises"></inspect-value>
+        </div>
+      </section>
+
+      <!-- 7. Functions -->
+      <section id="functions">
+        <h2>Functions &amp; classes</h2>
+        <p>Function bodies with syntax highlighting and class constructor inspection.</p>
+        <div class="card">
+          <inspect-value id="demo-functions" name="callables"></inspect-value>
+        </div>
+      </section>
+
+      <!-- 8. Dynamic Updates -->
+      <section id="dynamic">
+        <h2>Dynamic updates <span class="badge">live</span></h2>
+        <p>Values flash on update. Mutate the state and watch the inspector react.</p>
+        <div class="card">
+          <div class="controls">
+            <button id="btn-increment">counter++</button>
+            <button id="btn-add-item">Add item</button>
+            <button id="btn-toggle-status">Toggle status</button>
+            <button id="btn-randomize">Randomize</button>
+          </div>
+          <hr class="sep">
+          <inspect-value id="demo-dynamic" name="appState"></inspect-value>
+        </div>
+      </section>
+
+      <!-- 9. Panel -->
+      <section id="panel">
+        <h2>Panel component</h2>
+        <p>A fixed-position drawer for persistent state inspection. Click the floating button in the bottom-right corner.</p>
+        <div class="card">
+          <div class="controls">
+            <button id="btn-panel-toggle">Toggle panel open</button>
+            <label>Position:
+              <select id="panel-position">
+                <option value="bottom-right">bottom-right</option>
+                <option value="bottom-left">bottom-left</option>
+                <option value="top-right">top-right</option>
+                <option value="top-left">top-left</option>
+              </select>
+            </label>
+          </div>
+          <p style="color:#52525b; font-size: 0.8rem; margin-top: 0.5rem;">The panel is rendered outside this card as a fixed overlay.</p>
+        </div>
+        <inspect-panel id="demo-panel" name="panelState"></inspect-panel>
+      </section>
+
+      <!-- 10. Framework Usage -->
+      <section id="framework-usage">
+        <h2>Framework usage</h2>
+        <p>Works with any framework. Set complex values via JS properties, not HTML attributes.</p>
+        <div class="card">
+          <div class="split">
+            <div>
+              <div class="label">Vanilla JS</div>
+              <pre style="background:#0e0e10; border:1px solid #27272a; border-radius:6px; padding:0.75rem; font-size:0.78rem; overflow-x:auto;"><code><span style="color:#52525b">// grab the element</span>
+<span style="color:#c084fc">const</span> el = document.querySelector(<span style="color:#4ade80">'inspect-value'</span>);
+
+<span style="color:#52525b">// set any JS value</span>
+el.<span style="color:#60a5fa">value</span> = { hello: <span style="color:#4ade80">'world'</span> };
+el.<span style="color:#60a5fa">theme</span> = <span style="color:#4ade80">'drak'</span>;
+el.<span style="color:#60a5fa">search</span> = <span style="color:#4ade80">'filter'</span>;</code></pre>
+            </div>
+            <div>
+              <div class="label">React</div>
+              <pre style="background:#0e0e10; border:1px solid #27272a; border-radius:6px; padding:0.75rem; font-size:0.78rem; overflow-x:auto;"><code><span style="color:#c084fc">const</span> ref = useRef(<span style="color:#c084fc">null</span>);
+
+useEffect(() => {
+  ref.current.<span style="color:#60a5fa">value</span> = myData;
+}, [myData]);
+
+<span style="color:#c084fc">return</span> &lt;<span style="color:#60a5fa">inspect-value</span> ref={ref} /&gt;;</code></pre>
+            </div>
+          </div>
+          <div style="margin-top: 1rem;">
+            <div class="label">Vue</div>
+            <pre style="background:#0e0e10; border:1px solid #27272a; border-radius:6px; padding:0.75rem; font-size:0.78rem; overflow-x:auto; max-width: 50%;"><code>&lt;<span style="color:#60a5fa">inspect-value</span> <span style="color:#c084fc">:value.prop</span>=<span style="color:#4ade80">"myData"</span> /&gt;</code></pre>
+          </div>
+        </div>
+      </section>
+
     </div>
 
-    <!-- With search -->
-    <div class="demo-section">
-      <h2>With Search (try typing "email")</h2>
-      <inspect-value id="demo-search"></inspect-value>
-    </div>
-
-    <!-- Dynamic update -->
-    <div class="demo-section">
-      <h2>Dynamic Updates</h2>
-      <button id="btn-update">Update Value</button>
-      <button id="btn-add">Add Item</button>
-      <inspect-value id="demo-dynamic" name="liveData"></inspect-value>
-    </div>
-
-    <!-- Dev mode via script (simulates what a CDN user would do) -->
+    <!-- Load the web component -->
     <script type="module" src="/src/index.ts"></script>
 
     <script type="module">
-      // Wait for custom elements to be defined
       await customElements.whenDefined('inspect-value');
 
-      // Demo 1: Basic object
-      document.getElementById('demo-basic').value = {
+      // ── 1. All Types ──
+      document.getElementById('demo-types').value = {
         string: 'hello world',
         number: 42,
+        float: 3.14159,
+        bigint: BigInt('9007199254740991'),
         boolean: true,
         null: null,
-        array: [1, 2, 3, { nested: true }],
+        undefined: undefined,
+        symbol: Symbol('id'),
+        array: [1, 'mixed', true, null, [2, 3]],
         object: {
-          a: 1,
-          b: { c: { d: 'deep' } },
+          nested: { deeply: { value: 'found it' } },
         },
         date: new Date(),
-        regex: /test/gi,
-        map: new Map([['key1', 'value1'], ['key2', 'value2']]),
-        set: new Set([1, 2, 3]),
-        url: new URL('https://example.com/path?q=search'),
-        fn: function hello(name) { return `hi ${name}`; },
-        promise: Promise.resolve('done'),
+        regex: /^hello\s+world$/gi,
+        url: new URL('https://example.com/path?q=search&lang=en#section'),
+        map: new Map([['key1', 'value1'], ['key2', { nested: true }]]),
+        set: new Set([1, 2, 3, 'unique', { obj: true }]),
+        error: new Error('Something went wrong'),
+        typedArray: new Float64Array([1.1, 2.2, 3.3]),
       };
+      document.getElementById('demo-types').expandAll = true;
 
-      // Demo 2: Named value
-      document.getElementById('demo-named').value = {
-        status: 200,
-        data: {
-          users: [
-            { id: 1, name: 'Alice', email: 'alice@example.com' },
-            { id: 2, name: 'Bob', email: 'bob@example.com' },
-          ],
-          pagination: { page: 1, total: 42 },
+      // ── 2. Themes ──
+      const themes = ['inspect', 'drak', 'stereo', 'dark', 'default-dark', 'default-light'];
+      const themeContainer = document.getElementById('theme-buttons');
+      const themeEl = document.getElementById('demo-theme');
+
+      themeEl.value = {
+        id: 1,
+        name: 'Ada Lovelace',
+        email: 'ada@example.com',
+        roles: ['admin', 'developer'],
+        preferences: {
+          theme: 'dark',
+          notifications: { email: true, push: false },
         },
+        lastLogin: new Date(),
       };
 
-      // Demo 3: Search enabled
+      let currentTheme = 'inspect';
+      function renderThemeButtons() {
+        themeContainer.innerHTML = '';
+        themes.forEach(t => {
+          const btn = document.createElement('button');
+          btn.textContent = t;
+          if (t === currentTheme) btn.classList.add('active');
+          btn.addEventListener('click', () => {
+            currentTheme = t;
+            themeEl.theme = t;
+            renderThemeButtons();
+          });
+          themeContainer.appendChild(btn);
+        });
+      }
+      renderThemeButtons();
+
+      // ── 3. Editable JSON ──
+      const jsonInput = document.getElementById('json-input');
+      const editableEl = document.getElementById('demo-editable');
+
+      function updateEditable() {
+        try {
+          editableEl.value = JSON.parse(jsonInput.value);
+        } catch {
+          editableEl.value = { error: 'Invalid JSON', raw: jsonInput.value };
+        }
+      }
+      updateEditable();
+      jsonInput.addEventListener('input', updateEditable);
+
+      // ── 4. Search & Filter ──
       const searchEl = document.getElementById('demo-search');
       searchEl.search = 'filter';
+      searchEl.expandAll = true;
       searchEl.value = {
         users: [
-          { id: 1, name: 'Alice', email: 'alice@example.com', role: 'admin' },
-          { id: 2, name: 'Bob', email: 'bob@corp.com', role: 'user' },
-          { id: 3, name: 'Charlie', email: 'charlie@example.com', role: 'user' },
+          { id: 1, name: 'Alice Johnson', email: 'alice@example.com', role: 'admin', active: true },
+          { id: 2, name: 'Bob Smith', email: 'bob@corp.com', role: 'user', active: true },
+          { id: 3, name: 'Charlie Brown', email: 'charlie@example.com', role: 'user', active: false },
+          { id: 4, name: 'Diana Prince', email: 'diana@admin.org', role: 'admin', active: true },
         ],
         settings: {
-          notifications: { email: true, sms: false },
-          theme: 'dark',
+          notifications: { email: true, sms: false, push: true },
+          security: { twoFactor: true, lastAudit: '2025-01-15' },
+          display: { theme: 'dark', language: 'en' },
+        },
+        metadata: {
+          version: '2.1.0',
+          environment: 'production',
         },
       };
-
-      // Demo 4: Dynamic updates
-      let counter = 0;
-      let items = ['apple', 'banana'];
-      const dynamicEl = document.getElementById('demo-dynamic');
-
-      function updateDisplay() {
-        dynamicEl.value = {
-          counter,
-          items: [...items],
-          lastUpdated: new Date().toISOString(),
-        };
-      }
-      updateDisplay();
-
-      document.getElementById('btn-update').addEventListener('click', () => {
-        counter++;
-        updateDisplay();
+      document.getElementById('search-mode').addEventListener('change', (e) => {
+        searchEl.search = e.target.value;
       });
 
-      document.getElementById('btn-add').addEventListener('click', () => {
-        items.push(['cherry', 'date', 'elderberry', 'fig'][items.length % 4]);
-        updateDisplay();
+      // ── 5. Map & Set ──
+      const userMap = new Map();
+      userMap.set('alice', { role: 'admin', joined: new Date('2023-01-15') });
+      userMap.set('bob', { role: 'editor', joined: new Date('2023-06-20') });
+      userMap.set(42, 'numeric key');
+      userMap.set({ complex: 'key' }, 'object as key');
+
+      const tagSet = new Set(['javascript', 'svelte', 'web-components', 'typescript']);
+      const numberSet = new Set([1, 1, 2, 3, 5, 8, 13]);
+
+      document.getElementById('demo-mapset').value = {
+        userMap,
+        tagSet,
+        fibonacciSet: numberSet,
+        nestedMap: new Map([
+          ['config', new Map([['debug', true], ['verbose', false]])],
+        ]),
+      };
+
+      // ── 6. Promises ──
+      function createPromises() {
+        const slow = new Promise(resolve => setTimeout(() => resolve('done!'), 5000));
+        const resolved = Promise.resolve({ status: 'ok', data: [1, 2, 3] });
+        const rejected = Promise.reject(new Error('Network timeout')).catch(() => {});
+        const rejected2 = Promise.reject('string rejection').catch(() => {});
+
+        document.getElementById('demo-promises').value = {
+          pending: slow,
+          resolved,
+          rejectedWithError: Promise.reject(new Error('Network timeout')),
+          rejectedWithString: Promise.reject('string rejection'),
+          all: Promise.all([resolved, Promise.resolve(42)]),
+        };
+      }
+      createPromises();
+      document.getElementById('btn-new-promises').addEventListener('click', createPromises);
+
+      // ── 7. Functions & Classes ──
+      class Animal {
+        constructor(name, sound) {
+          this.name = name;
+          this.sound = sound;
+        }
+        speak() {
+          return `${this.name} says ${this.sound}`;
+        }
+      }
+
+      document.getElementById('demo-functions').value = {
+        arrowFn: (x, y) => x + y,
+        namedFn: function fibonacci(n) {
+          if (n <= 1) return n;
+          return fibonacci(n - 1) + fibonacci(n - 2);
+        },
+        asyncFn: async function fetchData(url) {
+          const res = await fetch(url);
+          return res.json();
+        },
+        generatorFn: function* range(start, end) {
+          for (let i = start; i < end; i++) yield i;
+        },
+        classConstructor: Animal,
+        instance: new Animal('Dog', 'woof'),
+      };
+
+      // ── 8. Dynamic Updates ──
+      let counter = 0;
+      let items = ['apple', 'banana', 'cherry'];
+      let status = 'running';
+      const fruits = ['date', 'elderberry', 'fig', 'grape', 'kiwi', 'lemon', 'mango'];
+      const dynamicEl = document.getElementById('demo-dynamic');
+
+      function updateDynamic() {
+        dynamicEl.value = {
+          counter,
+          status,
+          items: [...items],
+          metrics: {
+            itemCount: items.length,
+            lastUpdated: new Date().toISOString(),
+            random: Math.round(Math.random() * 100),
+          },
+        };
+      }
+      updateDynamic();
+
+      document.getElementById('btn-increment').addEventListener('click', () => {
+        counter++;
+        updateDynamic();
+      });
+      document.getElementById('btn-add-item').addEventListener('click', () => {
+        items.push(fruits[items.length % fruits.length]);
+        updateDynamic();
+      });
+      document.getElementById('btn-toggle-status').addEventListener('click', () => {
+        status = status === 'running' ? 'paused' : 'running';
+        updateDynamic();
+      });
+      document.getElementById('btn-randomize').addEventListener('click', () => {
+        counter = Math.floor(Math.random() * 1000);
+        items = items.sort(() => Math.random() - 0.5);
+        updateDynamic();
+      });
+
+      // ── 9. Panel ──
+      await customElements.whenDefined('inspect-panel');
+      const panelEl = document.getElementById('demo-panel');
+      panelEl.open = true;
+      panelEl.value = {
+        route: '/demo',
+        user: { name: 'Ada', authenticated: true },
+        cart: [
+          { id: 1, product: 'Keyboard', price: 79.99, qty: 1 },
+          { id: 2, product: 'Mouse', price: 49.99, qty: 2 },
+        ],
+        timestamp: new Date(),
+      };
+
+      document.getElementById('btn-panel-toggle').addEventListener('click', () => {
+        panelEl.open = !panelEl.open;
+      });
+      document.getElementById('panel-position').addEventListener('change', (e) => {
+        panelEl.position = e.target.value;
       });
     </script>
   </body>

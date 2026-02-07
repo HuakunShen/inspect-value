@@ -13,17 +13,14 @@ export default defineConfig({
     sourcemap: true,
   },
   plugins: [
-    // 1) Our wrapper components → compile as Custom Elements
     svelte({
-      include: ['src/**/*.svelte'],
-      compilerOptions: {
-        customElement: true,
+      dynamicCompileOptions({ filename }) {
+        // Compile our wrapper components as Custom Elements,
+        // everything else (library internals) as normal Svelte
+        if (filename.endsWith('.svelte') && !filename.includes('node_modules')) {
+          return { customElement: true };
+        }
       },
-    }),
-    // 2) Library internal .svelte files → compile as normal Svelte
-    //    svelte-inspect-value ships raw .svelte source that needs compilation
-    svelte({
-      exclude: ['src/**/*.svelte'],
     }),
   ],
 });
